@@ -219,7 +219,7 @@ static jlong initialHeapSize    = 0;  /* initial heap size */
 #endif
 
 /*
- * Entry point.
+ * Entry point. 【入口点】
  */
 JNIEXPORT int JNICALL
 JLI_Launch(int argc, char ** argv,              /* main argc, argv */
@@ -251,7 +251,7 @@ JLI_Launch(int argc, char ** argv,              /* main argc, argv */
     _is_java_args = javaargs;
     _wc_enabled = cpwildcard;
 
-    InitLauncher(javaw);
+    InitLauncher(javaw); // launcher(启动器)
     DumpState();
     if (JLI_IsTraceLauncher()) {
         int i;
@@ -290,7 +290,7 @@ JLI_Launch(int argc, char ** argv,              /* main argc, argv */
         start = CurrentTimeMicros();
     }
 
-    if (!LoadJavaVM(jvmpath, &ifn)) {
+    if (!LoadJavaVM(jvmpath, &ifn)) { 
         return(6);
     }
 

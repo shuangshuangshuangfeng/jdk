@@ -114,7 +114,7 @@ main(int argc, char **argv)
             ? sizeof(const_extra_jargs) / sizeof(char *)
             : 0; // ignore the null terminator index
 
-        if (main_jargc > 0 && extra_jargc > 0) { // combine extra java args
+        if (main_jargc > 0 && extra_jargc > 0) { // combine extra(额外的) java args
             jargc = main_jargc + extra_jargc;
             list = JLI_List_new(jargc + 1);
 
@@ -164,13 +164,13 @@ main(int argc, char **argv)
     }
 #else /* *NIXES */
     {
-        // accommodate the NULL at the end
+        // accommodate(容纳) the NULL at the end
         JLI_List args = JLI_List_new(argc + 1);
         int i = 0;
 
-        // Add first arg, which is the app name
+        // Add first arg, which is the app name 
         JLI_List_add(args, JLI_StringDup(argv[0]));
-        // Append JDK_JAVA_OPTIONS
+        // Append JDK_JAVA_OPTIONS 
         if (JLI_AddArgsFromEnvVar(args, JDK_JAVA_OPTIONS)) {
             // JLI_SetTraceLauncher is not called yet
             // Show _JAVA_OPTIONS content along with JDK_JAVA_OPTIONS to aid diagnosis
@@ -181,7 +181,7 @@ main(int argc, char **argv)
                 }
             }
         }
-        // Iterate the rest of command line
+        // Iterate(迭代) the rest(剩余的) of command line
         for (i = 1; i < argc; i++) {
             JLI_List argsInFile = JLI_PreprocessArg(argv[i], JNI_TRUE);
             if (NULL == argsInFile) {
@@ -203,7 +203,7 @@ main(int argc, char **argv)
         margv = args->elements;
     }
 #endif /* WIN32 */
-    return JLI_Launch(margc, margv,
+    return JLI_Launch(margc, margv, //  openjdk start 
                    jargc, (const char**) jargv,
                    0, NULL,
                    VERSION_STRING,
