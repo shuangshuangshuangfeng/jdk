@@ -222,6 +222,7 @@ ContainsLibJVM(const char *env) {
 
 /*
  * Test whether the environment variable needs to be set, see flowchart.
+ * 测试环境变量是否必须设置
  */
 static jboolean
 RequiresSetenv(const char *jvmpath) {
@@ -323,13 +324,13 @@ CreateExecutionEnvironment(int *pargc, char ***pargv,
     JLI_Snprintf(jvmcfg, so_jvmcfg, "%s%slib%sjvm.cfg",
             jrepath, FILESEP, FILESEP);
     /* Find the specified JVM type */
-    if (ReadKnownVMs(jvmcfg, JNI_FALSE) < 1) {
+    if (ReadKnownVMs(jvmcfg, JNI_FALSE) < 1) { // 读取当前VM配置内容
         JLI_ReportErrorMessage(CFG_ERROR7);
         exit(1);
     }
 
     jvmpath[0] = '\0';
-    jvmtype = CheckJvmType(pargc, pargv, JNI_FALSE);
+    jvmtype = CheckJvmType(pargc, pargv, JNI_FALSE); // 检查JVM类型, 如果没有指定，则使用默认类型
     if (JLI_StrCmp(jvmtype, "ERROR") == 0) {
         JLI_ReportErrorMessage(CFG_ERROR9);
         exit(4);
@@ -652,6 +653,7 @@ static void* ThreadJavaMain(void* args) {
 }
 
 /*
+ * 阻塞当前线程，然后执行一个新的线程
  * Block current thread and continue execution in a new thread.
  */
 int

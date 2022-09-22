@@ -123,7 +123,7 @@ JLI_SetTraceLauncher();
 jboolean JLI_IsTraceLauncher();
 
 /*
- * JLI_List - a dynamic list of char*
+ * JLI_List - a dynamic(动态的) list of char*
  */
 struct JLI_List_
 {

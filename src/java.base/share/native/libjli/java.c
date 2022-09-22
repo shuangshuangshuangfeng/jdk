@@ -290,7 +290,7 @@ JLI_Launch(int argc, char ** argv,              /* main argc, argv */
         start = CurrentTimeMicros();
     }
 
-    if (!LoadJavaVM(jvmpath, &ifn)) { 
+    if (!LoadJavaVM(jvmpath, &ifn)) {  // 加载JVM
         return(6);
     }
 
@@ -304,7 +304,7 @@ JLI_Launch(int argc, char ** argv,              /* main argc, argv */
     --argc;
 
     if (IsJavaArgs()) {
-        /* Preprocess wrapper arguments */
+        /* Preprocess wrapper(包装) arguments */
         TranslateApplicationArgs(jargc, jargv, &argc, &argv);
         if (!AddApplicationOptions(appclassc, appclassv)) {
             return(1);
@@ -334,7 +334,7 @@ JLI_Launch(int argc, char ** argv,              /* main argc, argv */
 
     /* Set the -Dsun.java.launcher pseudo property */
     SetJavaLauncherProp();
-
+    /* 启动JVM */ 
     return JVMInit(&ifn, threadStackSize, argc, argv, mode, what, ret);
 }
 /*
@@ -398,7 +398,7 @@ JavaMain(void* _args)
     JavaVM *vm = 0;
     JNIEnv *env = 0;
     jclass mainClass = NULL;
-    jclass appClass = NULL; // actual application class being launched
+    jclass appClass = NULL; // actual(实际的) application class being launched(推出)
     jmethodID mainID;
     jobjectArray mainArgs;
     int ret = 0;
@@ -424,7 +424,7 @@ JavaMain(void* _args)
         CHECK_EXCEPTION_LEAVE(1);
     }
 
-    // list observable modules, then exit
+    // list observable(可观察的) modules, then exit
     if (listModules) {
         ListModules(env);
         CHECK_EXCEPTION_LEAVE(1);
@@ -458,7 +458,7 @@ JavaMain(void* _args)
         LEAVE();
     }
 
-    FreeKnownVMs(); /* after last possible PrintUsage */
+    FreeKnownVMs(); /* after last possible PrintUsage 打印帮助文档 */
 
     if (JLI_IsTraceLauncher()) {
         end = CurrentTimeMicros();
@@ -479,7 +479,7 @@ JavaMain(void* _args)
 
     /*
      * Get the application's main class. It also checks if the main
-     * method exists.
+     * method exists. 检查main函数的存在
      *
      * See bugid 5030265.  The Main-Class name has already been parsed
      * from the manifest, but not parsed properly for UTF-8 support.
@@ -541,11 +541,11 @@ JavaMain(void* _args)
                                        "([Ljava/lang/String;)V");
     CHECK_EXCEPTION_NULL_LEAVE(mainID);
 
-    /* Invoke main method. */
+    /* Invoke(调用) main method. */
     (*env)->CallStaticVoidMethod(env, mainClass, mainID, mainArgs);
 
     /*
-     * The launcher's exit code (in the absence of calls to
+     * The launcher's exit code (in the absence(缺席、不在) of calls to
      * System.exit) will be non-zero if main threw an exception.
      */
     ret = (*env)->ExceptionOccurred(env) == NULL ? 0 : 1;
@@ -617,6 +617,7 @@ IsLongFormModuleOption(const char* name) {
 
 /*
  * Test if the given name has a white space option.
+ * 测试 name是不是 空白
  */
 jboolean
 IsWhiteSpaceOption(const char* name) {
@@ -681,7 +682,7 @@ CheckJvmType(int *pargc, char ***argv, jboolean speculative) {
                 continue;
             }
         } else {
-            if (IsWhiteSpaceOption(arg)) {
+            if (IsWhiteSpaceOption(arg)) { // 测试参数是否为空
                 newArgv[newArgvIdx++] = arg;
                 argi++;
                 if (argi < argc) {
@@ -730,7 +731,7 @@ CheckJvmType(int *pargc, char ***argv, jboolean speculative) {
     *argv = newArgv;
     *pargc = newArgvIdx;
 
-    /* use the default VM type if not specified (no alias processing) */
+    /* use the default VM type if not specified(指定) (no alias processing) */
     if (jvmtype == NULL) {
       char* result = knownVMs[0].name+1;
       JLI_TraceLauncher("Default VM: %s\n", result);
@@ -1430,7 +1431,7 @@ ParseArguments(int *pargc, char ***pargv,
 
 /*
  * Initializes the Java Virtual Machine. Also frees options array when
- * finished.
+ * finished. 启动虚拟机，然后当虚拟机结束的时候释放参数数组
  */
 static jboolean
 InitializeJVM(JavaVM **pvm, JNIEnv **penv, InvocationFunctions *ifn)
@@ -1996,7 +1997,7 @@ PrintUsage(JNIEnv* env, jboolean doXUsage)
 jint
 ReadKnownVMs(const char *jvmCfgName, jboolean speculative)
 {
-    FILE *jvmCfg;
+    FILE *jvmCfg; // jvm 配置文件
     char line[MAXPATHLEN+20];
     int cnt = 0;
     int lineno = 0;
@@ -2010,7 +2011,7 @@ ReadKnownVMs(const char *jvmCfgName, jboolean speculative)
         start = CurrentTimeMicros();
     }
 
-    jvmCfg = fopen(jvmCfgName, "r");
+    jvmCfg = fopen(jvmCfgName, "r"); // 读取JVM配置文件  ./linux-x86_64-server-slowdebug/jdk/lib/jvm.cfg
     if (jvmCfg == NULL) {
       if (!speculative) {
         JLI_ReportErrorMessage(CFG_ERROR6, jvmCfgName);
@@ -2259,7 +2260,7 @@ ContinueInNewThread(InvocationFunctions* ifn, jlong threadStackSize,
          * return its default stack size through the init args structure.
          */
         struct JDK1_1InitArgs args1_1;
-        memset((void*)&args1_1, 0, sizeof(args1_1));
+        memset((void*)&args1_1, 0, sizeof(args1_1)); // 使用0来填充 args1_1
         args1_1.version = JNI_VERSION_1_1;
         ifn->GetDefaultJavaVMInitArgs(&args1_1);  /* ignore return value */
         if (args1_1.javaStackSize > 0) {
@@ -2267,7 +2268,7 @@ ContinueInNewThread(InvocationFunctions* ifn, jlong threadStackSize,
         }
     }
 
-    { /* Create a new thread to create JVM and invoke main method */
+    { /* Create a new thread to create JVM and invoke(调用) main method */
         JavaMainArgs args;
         int rslt;
 
@@ -2276,13 +2277,13 @@ ContinueInNewThread(InvocationFunctions* ifn, jlong threadStackSize,
         args.mode = mode;
         args.what = what;
         args.ifn = *ifn;
-
+        /*  在新创建的线程中， 执行Java Main函数  */
         rslt = CallJavaMainInNewThread(threadStackSize, (void*)&args);
         /* If the caller has deemed there is an error we
          * simply return that, otherwise we return the value of
          * the callee
          */
-        return (ret != 0) ? ret : rslt;
+        return (ret != 0) ? ret : rslt; // main函数执行结果
     }
 }
 

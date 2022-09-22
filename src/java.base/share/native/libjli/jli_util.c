@@ -135,7 +135,7 @@ JNIEXPORT JLI_List JNICALL
 JLI_List_new(size_t capacity)
 {
     JLI_List l = (JLI_List) JLI_MemAlloc(sizeof(struct JLI_List_));
-    l->capacity = capacity;
+    l->capacity = capacity; // capacity(容量)
     l->elements = (char **) JLI_MemAlloc(capacity * sizeof(l->elements[0]));
     l->size = 0;
     return l;

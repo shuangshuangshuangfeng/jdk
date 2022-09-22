@@ -119,10 +119,10 @@ GetApplicationHomeFromDll(char *buf, jint bufsize);
 #define GetArch() GetArchPath(CURRENT_DATA_MODEL)
 
 /*
- * Different platforms will implement this, here
- * pargc is a pointer to the original argc,
+ * Different platforms will implement(实现) this, here
+ * pargc is a pointer to the original(原来的) argc,
  * pargv is a pointer to the original argv,
- * jrepath is an accessible path to the jre as determined by the call
+ * jrepath is an accessible path to the jre as determined(决定) by the call(调用)
  * so_jrepath is the length of the buffer jrepath
  * jvmpath is an accessible path to the jvm as determined by the call
  * so_jvmpath is the length of the buffer jvmpath
@@ -132,7 +132,7 @@ void CreateExecutionEnvironment(int *argc, char ***argv,
                                 char *jvmpath, jint so_jvmpath,
                                 char *jvmcfg,  jint so_jvmcfg);
 
-/* Reports an error message to stderr or a window as appropriate. */
+/* Reports an error message to stderr or a window as appropriate(合适的). */
 JNIEXPORT void JNICALL
 JLI_ReportErrorMessage(const char * message, ...);
 
@@ -156,7 +156,7 @@ JLI_ReportExceptionDescription(JNIEnv * env);
 void PrintMachineDependentOptions();
 
 /*
- * Block current thread and continue execution in new thread.
+ * Block current thread and continue execution(执行) in new thread.
  */
 int CallJavaMainInNewThread(jlong stack_size, void* args);
 
